@@ -1,3 +1,5 @@
+//Package requestutil provides some helper function for extracting scheme, host
+//and port information from http requests.
 package requestutil
 
 import (
