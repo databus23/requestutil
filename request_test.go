@@ -114,3 +114,35 @@ func TestPort(t *testing.T) {
 	}
 
 }
+
+func TestBaseURL(t *testing.T) {
+	var cases = []struct {
+		headers  map[string]string
+		expected string
+	}{
+		{
+			map[string]string{},
+			"http://localhost",
+		},
+		{
+			map[string]string{"Host": "localhost", "X-Forwarded-Host": "blafasel:1, blufasel,blafasel:443", "X-Forwarded-Scheme": "https"},
+			"https://blafasel:443",
+		},
+	}
+
+	for i, c := range cases {
+		header := http.Header{}
+		for key, val := range c.headers {
+			header[key] = []string{val}
+		}
+		req := http.Request{
+			Header: header,
+			Host:   "localhost",
+		}
+
+		if s := BaseURL(&req); s != c.expected {
+			t.Errorf("Case %d. Expected %#v, got %#v, headers: %v", i+1, c.expected, s, c.headers)
+		}
+	}
+
+}

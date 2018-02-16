@@ -55,6 +55,11 @@ func Port(req *http.Request) int {
 	return defaultPorts(Scheme(req))
 }
 
+//BaseURL returns Scheme + HostWithPort
+func BaseURL(req *http.Request) string {
+	return Scheme(req) + "://" + HostWithPort(req)
+}
+
 func defaultPorts(scheme string) int {
 	if scheme == "https" {
 		return 443
